@@ -1,0 +1,203 @@
+JAR - Java Archive : a package file format typically used to aggregate many Java class files and 
+	associated metadata and resources (text, images, etc.) into one file to distribute application software 
+	or libraries on the Java platform. 
+	In simple words, a JAR file is a file that contains a compressed version of .class files, audio files, 
+	image files, or directories.
+
+
+
+MAVEN:
+	- Project management tool
+	- simplifies and standardizes the project build process
+	- Apache developed maven to
+		1) build multiple projects together
+		2) share JARs across projects
+		3) deploy projects
+		
+	- maven project structure and contents are declared in an xml file, pom.xml (Project Object Model - POM)
+	- POM is the fundamental unit of maven system.
+	
+	
+Convention over Configuration:
+	- maven uses Convention over Configuration
+	- developers do not have to mention configuration details, 
+		maven creates default project structure - developers only have to place files accordingly
+		
+
+Features:
+	- Simple project setup
+	- Consistent usage across all projects
+	- Dependency management including automatic updating.
+	- Model-based builds : Maven is able to build any number of projects into predefined output types such as jar, war, metadata
+	- Without additional configuration, maven will integrate with your source control system (GIT)
+	
+	
+POM:
+	- Process Object Model
+	- it is an xml file (pom.xml) that resides in the base folder of the project
+	- POM contains information about the project and various configuration detail used by Maven to build the project
+	- also contains the goals and plugins.
+	- While executing a task or goal, Maven looks for the POM in the current directory. 
+		It reads the POM, gets the needed configuration information, and then executes the goal.
+	- Some of the configuration that can be specified in the POM are following:
+			project dependencies
+			plugins
+			goals
+			build profiles
+	- there should be a single POM file for each project
+	- All POM files require the project element and three mandatory fields: groupId, artifactId, version.
+	- Projects notation in repository is groupId:artifactId:version				
+	
+	Super POM:
+		- Maven’s default POM
+		- contains values inherited by default
+		- All POMs inherit from a parent or default
+		- Maven use the effective POM (configuration from super pom plus project configuration) to execute relevant goal
+		
+		
+Build Lifecycle:
+	- well-defined sequence of phases, which define the order in which the goals are to be executed
+	- There are always pre and post phases to register goals, which must run prior to, or after a particular phase
+	- Maven has the following three standard lifecycles
+		clean
+		default(or build)
+		site
+	
+	- A goal represents a specific task which contributes to the building and managing of a project. 
+		It may be bound to zero or more build phases. A goal not bound to any build phase could be executed outside 
+		of the build lifecycle by direct invocation.
+
+	- The order of execution depends on the order in which the goal(s) and the build phase(s) are invoked. 
+		For example, consider the command below. 
+		
+		mvn clean dependency:copy-dependencies package
+		
+		- The clean and package arguments are build phases while the dependency:copy-dependencies is a goal.
+		- Here the clean phase will be executed first, followed by the dependency:copy-dependencies goal, 
+			and finally package phase will be executed.
+
+
+	Clean Lifecycle:
+		- When we execute mvn post-clean command, Maven invokes the clean lifecycle consisting of the following phases.
+			pre-clean
+			clean
+			post-clean
+		- Maven clean goal (clean:clean) is bound to the clean phase in the clean lifecycle. 
+		- Its clean:clean goal deletes the output of a build by deleting the build directory. 
+		- Thus, when mvn clean command executes, Maven deletes the build directory.
+	
+	
+	Default (or Build) Lifecycle:
+		- primary life cycle of Maven and is used to build the application. 
+		- It has the following 21 phases	
+			1) validate - Validates whether project is correct and all necessary information is available to 
+				complete the build process.
+			2) initialize - Initializes build state, for example set properties.
+			3) generate-sources - Generate any source code to be included in compilation phase.
+			4) process-sources - Process the source code, for example, filter any value.
+			5) generate-resources - Generate resources to be included in the package.
+			6) process-resources - Copy and process the resources into the destination directory, ready for packaging phase.
+			7) compile - Compile the source code of the project.
+			8) process-classes - Post-process the generated files from compilation, for example to do 
+				bytecode enhancement/optimization on Java classes.
+			9) generate-test-sources - Generate any test source code to be included in compilation phase.
+			10) process-test-sources - Process the test source code, for example, filter any values.
+			11) test-compile - Compile the test source code into the test destination directory.
+			12) process-test-classes - Process the generated files from test code file compilation.
+			13) test - Run tests using a suitable unit testing framework (Junit is one).
+			14) prepare-package - Perform any operations necessary to prepare a package before the actual packaging.
+			15) package - Take the compiled code and package it in its distributable format, such as a JAR, WAR, or EAR file.
+			16) pre-integration-test - Perform actions required before integration tests are executed. 
+				For example, setting up the required environment.
+			17) integration-test - Process and deploy the package if necessary into an environment where integration 
+				tests can be run.
+			18) post-integration-test - Perform actions required after integration tests have been executed. 
+				For example, cleaning up the environment.
+			19) verify - Run any check-ups to verify the package is valid and meets quality criteria.
+			20) install - Install the package into the local repository, which can be used as a dependency in other 
+				projects locally.
+			21) deploy - Copies the final package to the remote repository for sharing with other developers and projects.
+	
+		- When a phase is called via Maven command, for example mvn compile, only phases up to and including that 
+			phase will execute.
+		- Different maven goals will be bound to different phases of Maven lifecycle depending upon the 
+			type of packaging (JAR / WAR / EAR).
+	
+	
+	Site Lifecycle:
+		- Maven Site plugin is generally used to create fresh documentation to create reports, deploy site, etc. 
+		- It has the following phases 
+			pre-site
+			site
+			post-site
+			site-deploy
+			
+			
+Build Profile:
+	- Build profile is a set of configuration values, which can be used to set or override default values of Maven build. 
+	- Using a build profile, you can customize build for different environments such as Production v/s Development environments.
+	- Profiles are specified in pom.xml file using its activeProfiles/profiles elements and are triggered in variety of ways. 
+	- Profiles modify the POM at build time, and are used to give parameters different target environments 
+		(for example, the path of the database server in the development, testing, and production environments)
+		
+		
+Maven Repository:
+	- a repository is a directory where all the project jars, library jar, plugins or any other project 
+		specific artifacts are stored and can be used by Maven easily.
+	- Maven repository are of three types. 
+		local
+		central
+		remote
+		
+		
+Maven Plugins:
+	- Maven is actually a plugin execution framework where every task is actually done by plugins. 
+		Maven Plugins are generally used to −
+			create jar file
+			create war file
+			compile code files
+			unit testing of code
+			create project documentation
+			create project reports
+	- A plugin generally provides a set of goals, which can be executed using the following syntax −
+		mvn [plugin-name]:[goal-name]
+	- list of few common plugins
+		1) clean - Cleans up target after the build. Deletes the target directory.
+		2) compiler - Compiles Java source files.
+		3) surefire - Runs the JUnit unit tests. Creates test reports.
+		4) jar - Builds a JAR file from the current project.
+		5) war - Builds a WAR file from the current project.
+		6) javadoc - Generates Javadoc for the project.
+		7) antrun - Runs a set of ant tasks from any phase mentioned of the build.
+		
+		
+Dependency Management:
+	- Transitive Dependency Discovery
+		- say, library A uses B. In case another project C wants to use A then it has to use B too.
+		- Maven helps to avoid such requirements to discover all the libraries required. 
+			Maven does so by reading project files (pom.xml) of dependencies, figure out their dependencies and so on.
+		- We only need to define direct dependency in each project pom. Maven handles the rest automatically.
+		
+	- Features:
+		1) Dependency Mediation - Determines what version of a dependency is to be used when multiple 
+			versions of an artifact are encountered.
+		2) Dependency Management - Directly specify the versions of artifacts to be used when they are encountered 
+			in transitive dependencies. For an example project C can include B as a dependency in its dependency 
+			Management section and directly control which version of B is to be used when it is ever referenced.
+		3) Dependency scope - Includes dependencies as per the current stage of the build.
+			- Transitive Dependencies Discovery can be restricted using various Dependency Scope as mentioned below.
+				1) Compile - This scope indicates that dependency is available in classpath of project. It is default scope.
+				2) Provided - This scope indicates that dependency is to be provided by JDK or web-Server/Container at runtime.
+				3) Runtime - This scope indicates that dependency is not required for compilation, but is required during execution.
+				4) Test - This scope indicates that the dependency is only available for the test compilation and execution phases.
+				5) System - This scope indicates that you have to provide the system path.
+				6) Import - This scope is only used when dependency is of type pom. This scope indicates that the 
+					specified POM should be replaced with the dependencies in that POM's <dependencyManagement> section.
+		4) Excluded dependencies - Any transitive dependency can be excluded using "exclusion" element. 
+			As example, A depends upon B and B depends upon C, then A can mark C as excluded.
+		5) Optional dependencies - Any transitive dependency can be marked as optional using "optional" element. 
+			As example, A depends upon B and B depends upon C. Now B marked C as optional. Then A will not use C.
+		
+		
+		
+		
