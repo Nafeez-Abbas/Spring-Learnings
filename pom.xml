@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.0.0</version>
-		<!-- Cmt:2 - Specifies the version of Spring Core used -->
+		<!-- Cmt:2 - Specifies the version of Spring boot used -->
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.learnings</groupId>
